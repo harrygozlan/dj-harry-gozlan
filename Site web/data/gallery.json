@@ -6,6 +6,11 @@
       "position": "center 20%"
     },
     {
+      "src": "/images/harry-gozlan-dj-laser-vert-scene.jpg",
+      "alt": "Harry Gozlan DJ laser vert scène",
+      "position": "center 20%"
+    },
+    {
       "src": "/images/harry-gozlan-dj-grande-scene-show.jpg",
       "alt": "Grande scène Harry Gozlan DJ",
       "position": "center 30%"
@@ -24,11 +29,6 @@
       "src": "/images/harry-gozlan-dj-booth-neon-rouge.jpg",
       "alt": "Harry Gozlan DJ booth neon rouge",
       "position": "center 40%"
-    },
-    {
-      "src": "/images/harry-gozlan-dj-laser-vert-scene.jpg",
-      "alt": "Harry Gozlan DJ laser vert scène",
-      "position": "center 20%"
     }
   ]
 }
