@@ -6,14 +6,14 @@
       "position": "center 20%"
     },
     {
-      "src": "/images/harry-gozlan-dj-live-chanteuse-scene.jpg",
-      "alt": "DJ Harry Gozlan live avec chanteuse",
-      "position": "center top"
-    },
-    {
       "src": "/images/harry-gozlan-dj-set-led-colore.jpg",
       "alt": "Harry Gozlan DJ set LED coloré",
       "position": "center 25%"
+    },
+    {
+      "src": "/images/harry-gozlan-dj-live-chanteuse-scene.jpg",
+      "alt": "DJ Harry Gozlan live avec chanteuse",
+      "position": "center top"
     },
     {
       "src": "/images/harry-gozlan-dj-booth-neon-rouge.jpg",
