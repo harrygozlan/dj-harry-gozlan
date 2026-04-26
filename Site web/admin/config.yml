@@ -1,0 +1,84 @@
+backend:
+  name: git-gateway
+  branch: main
+
+locale: 'fr'
+
+media_folder: "Site web/images"
+public_folder: "/images"
+
+collections:
+
+  - name: "galerie"
+    label: "📸 Galerie Photos"
+    files:
+      - label: "Photos de la galerie"
+        name: "gallery"
+        file: "Site web/data/gallery.json"
+        fields:
+          - label: "Photos"
+            name: "photos"
+            widget: "list"
+            summary: "{{fields.alt}}"
+            fields:
+              - label: "Image"
+                name: "src"
+                widget: "image"
+                hint: "Uploader une photo (format portrait recommandé)"
+              - label: "Description (texte alternatif)"
+                name: "alt"
+                widget: "string"
+                hint: "Ex: DJ Harry Gozlan mariage Paris"
+              - label: "Position de l'image"
+                name: "position"
+                widget: "select"
+                options:
+                  - { label: "Centre", value: "center center" }
+                  - { label: "Haut", value: "center top" }
+                  - { label: "Haut 20%", value: "center 20%" }
+                  - { label: "Haut 30%", value: "center 30%" }
+                  - { label: "Milieu 40%", value: "center 40%" }
+                  - { label: "Bas", value: "center bottom" }
+                default: "center center"
+
+  - name: "videos"
+    label: "🎬 Vidéos Wistia"
+    files:
+      - label: "Gestion des vidéos"
+        name: "videos"
+        file: "Site web/data/videos.json"
+        fields:
+          - label: "IDs des vidéos Wistia"
+            name: "ids"
+            widget: "list"
+            summary: "Vidéo : {{fields.id}}"
+            field:
+              label: "ID Wistia"
+              name: "id"
+              widget: "string"
+              hint: "Ex: wbv1wn4gwy (les caractères après /medias/ dans l'URL Wistia)"
+
+  - name: "parametres"
+    label: "⚙️ Paramètres du site"
+    files:
+      - label: "Informations générales"
+        name: "settings"
+        file: "Site web/data/settings.json"
+        fields:
+          - label: "Téléphone"
+            name: "phone"
+            widget: "string"
+            hint: "Ex: 06 31 99 72 24"
+          - label: "Email"
+            name: "email"
+            widget: "string"
+          - label: "Instagram URL"
+            name: "instagram"
+            widget: "string"
+          - label: "TikTok URL"
+            name: "tiktok"
+            widget: "string"
+          - label: "Message de disponibilité"
+            name: "disponibilite"
+            widget: "string"
+            hint: "Ex: Agenda 2026–2027 — Quelques dates encore disponibles."
