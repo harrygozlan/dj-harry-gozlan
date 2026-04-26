@@ -20,6 +20,7 @@
   <meta name="twitter:description" content="20 ans d'expérience · +1000 événements. DJ mariage, bar-mitsvah, soirée corporate à Paris & International." />
   <meta name="twitter:image" content="https://djharrygozlan.netlify.app/images/harry-gozlan-dj-set-soiree-mariage-paris.jpg" />
 
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet" />
@@ -484,14 +485,7 @@
       <h2 class="section-title">Des nuits<br />inoubliables.</h2>
       <div class="white-line"></div>
     </div>
-    <div class="gallery-grid">
-      <div class="gallery-item" onclick="openLightbox(this)"><img class="gallery-img" src="images/harry-gozlan-dj-dubai-burj-khalifa.jpg" alt="DJ Harry Gozlan Dubai" style="object-position:center 20%;" /><div class="gallery-overlay"><div class="gallery-icon">+</div></div></div>
-      <div class="gallery-item" onclick="openLightbox(this)"><img class="gallery-img" src="images/harry-gozlan-dj-grande-scene-show.jpg" alt="Grande scène Harry Gozlan DJ" style="object-position:center 30%;" /><div class="gallery-overlay"><div class="gallery-icon">+</div></div></div>
-      <div class="gallery-item" onclick="openLightbox(this)"><img class="gallery-img" src="images/harry-gozlan-dj-live-chanteuse-scene.jpg" alt="DJ Harry Gozlan live avec chanteuse" style="object-position:center top;" /><div class="gallery-overlay"><div class="gallery-icon">+</div></div></div>
-      <div class="gallery-item" onclick="openLightbox(this)"><img class="gallery-img" src="images/harry-gozlan-dj-set-led-colore.jpg" alt="Harry Gozlan DJ set LED" style="object-position:center 25%;" /><div class="gallery-overlay"><div class="gallery-icon">+</div></div></div>
-      <div class="gallery-item" onclick="openLightbox(this)"><img class="gallery-img" src="images/harry-gozlan-dj-booth-neon-rouge.jpg" alt="Harry Gozlan DJ booth neon" style="object-position:center 40%;" /><div class="gallery-overlay"><div class="gallery-icon">+</div></div></div>
-      <div class="gallery-item" onclick="openLightbox(this)"><img class="gallery-img" src="images/harry-gozlan-dj-laser-vert-scene.jpg" alt="Harry Gozlan DJ laser vert scène" style="object-position:center 20%;" /><div class="gallery-overlay"><div class="gallery-icon">+</div></div></div>
-    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
   </section>
 
   <!-- VIDÉOS -->
@@ -697,15 +691,50 @@
 
 
   <script>
+    // ── NETLIFY IDENTITY REDIRECT ──
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; });
+        }
+      });
+    }
+
+    // ── GALERIE DYNAMIQUE ──
+    async function loadGallery() {
+      try {
+        const res = await fetch('/data/gallery.json');
+        const data = await res.json();
+        const grid = document.getElementById('galleryGrid');
+        grid.innerHTML = data.photos.map(photo => `
+          <div class="gallery-item" onclick="openLightbox(this)">
+            <img class="gallery-img" src="${photo.src}" alt="${photo.alt}" style="object-position:${photo.position};" />
+            <div class="gallery-overlay"><div class="gallery-icon">+</div></div>
+          </div>
+        `).join('');
+        // Réappliquer observer et stagger
+        grid.querySelectorAll('.gallery-item').forEach((el, i) => {
+          el.style.transitionDelay = `${i * .07}s`;
+          obs.observe(el);
+        });
+      } catch(e) { console.warn('Gallery load error', e); }
+    }
+
     // ── WISTIA VIDEOS ──
     const WISTIA_ACCOUNT = 'lesitedumariage';
-    const WISTIA_IDS = [
-      'wbv1wn4gwy', 'ktukr14m4m', '69ngvnq4v6', 'ccy6ubumrz',
-      'mvkaxo29im', 'drh1ubj1vu', 'oqvpya8aev'
-    ];
+    let WISTIA_IDS = [];
+    async function loadVideoIds() {
+      try {
+        const res = await fetch('/data/videos.json');
+        const data = await res.json();
+        WISTIA_IDS = data.ids;
+      } catch(e) {
+        WISTIA_IDS = ['wbv1wn4gwy','ktukr14m4m','69ngvnq4v6','ccy6ubumrz','mvkaxo29im','drh1ubj1vu','oqvpya8aev'];
+      }
+    }
     const playSVG = `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
     const PER_PAGE_VIDEOS = 4;
-    const VIDEO_PAGES = Math.ceil(WISTIA_IDS.length / PER_PAGE_VIDEOS);
+    let VIDEO_PAGES = 0;
     let videosPage = 0;
     let wistiaData = [];
 
@@ -780,7 +809,13 @@
     }
 
 
-    loadWistiaVideos();
+    // Initialisation : charger galerie + vidéos depuis JSON
+    (async function init() {
+      await loadVideoIds();
+      VIDEO_PAGES = Math.ceil(WISTIA_IDS.length / PER_PAGE_VIDEOS);
+      loadWistiaVideos();
+      loadGallery();
+    })();
 
     // Blog → pages statiques (blog/index.html)
 
