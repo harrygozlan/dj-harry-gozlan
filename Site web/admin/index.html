@@ -5,8 +5,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Harry Gozlan DJ — Administration</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Inter', sans-serif; }
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // ── PRÉVISUALISATION GALERIE ──
+    var GalleryPreview = createClass({
+      render: function() {
+        var entry = this.props.entry;
+        var photos = entry.getIn(['data', 'photos']);
+
+        if (!photos || !photos.size) {
+          return h('div', { style: { padding: '40px', textAlign: 'center', color: '#888', fontFamily: 'serif', fontSize: '16px' } },
+            'Aucune photo dans la galerie pour l\'instant.'
+          );
+        }
+
+        return h('div', { style: { background: '#0e0e0e', minHeight: '100vh', padding: '24px' } },
+          h('p', { style: { color: '#888', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '20px' } },
+            '📸 Galerie — ' + photos.size + ' photo(s)'
+          ),
+          h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4px' } },
+            photos.map(function(photo, i) {
+              var src = photo.get('src') || '';
+              var alt = photo.get('alt') || '';
+              var pos = photo.get('position') || 'center center';
+              return h('div', {
+                key: i,
+                style: { position: 'relative', aspectRatio: '3/4', overflow: 'hidden', background: '#1a1a1a', borderRadius: '2px' }
+              },
+                h('img', {
+                  src: src,
+                  alt: alt,
+                  style: {
+                    width: '100%', height: '100%', objectFit: 'cover',
+                    objectPosition: pos, display: 'block'
+                  }
+                }),
+                h('div', {
+                  style: {
+                    position: 'absolute', bottom: 0, left: 0, right: 0,
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.85), transparent)',
+                    padding: '20px 10px 8px'
+                  }
+                },
+                  h('p', {
+                    style: { color: '#fff', fontSize: '10px', margin: 0, opacity: 0.8, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }
+                  }, alt)
+                )
+              );
+            })
+          )
+        );
+      }
+    });
+
+    CMS.registerPreviewTemplate('gallery', GalleryPreview);
+
+    // ── PRÉVISUALISATION VIDÉOS ──
+    var VideosPreview = createClass({
+      render: function() {
+        var entry = this.props.entry;
+        var videos = entry.getIn(['data', 'ids']);
+
+        if (!videos || !videos.size) {
+          return h('div', { style: { padding: '40px', textAlign: 'center', color: '#888', fontSize: '16px', fontFamily: 'serif' } },
+            'Aucune vidéo pour l\'instant.'
+          );
+        }
+
+        return h('div', { style: { background: '#0e0e0e', minHeight: '100vh', padding: '24px' } },
+          h('p', { style: { color: '#888', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '20px' } },
+            '🎬 Vidéos — ' + videos.size + ' vidéo(s)'
+          ),
+          h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' } },
+            videos.map(function(video, i) {
+              var id     = video.get ? video.get('id')        : video;
+              var titre  = video.get ? video.get('titre')     : id;
+              var thumb  = video.get ? video.get('thumbnail') : null;
+
+              return h('div', {
+                key: i,
+                style: { position: 'relative', aspectRatio: '9/16', overflow: 'hidden', borderRadius: '6px', background: '#111' }
+              },
+                thumb
+                  ? h('img', { src: thumb, style: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' } })
+                  : h('div', {
+                      style: {
+                        width: '100%', height: '100%',
+                        background: 'linear-gradient(160deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px'
+                      }
+                    },
+                      h('div', {
+                        style: {
+                          width: '52px', height: '52px', borderRadius: '50%',
+                          border: '1.5px solid rgba(255,255,255,0.35)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center'
+                        }
+                      },
+                        h('span', { style: { color: 'white', fontSize: '22px', marginLeft: '4px' } }, '▶')
+                      ),
+                      h('span', { style: { color: 'rgba(255,255,255,0.4)', fontSize: '9px', letterSpacing: '2px', textTransform: 'uppercase' } }, id)
+                    ),
+                h('div', {
+                  style: {
+                    position: 'absolute', bottom: 0, left: 0, right: 0,
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)',
+                    padding: '24px 12px 10px'
+                  }
+                },
+                  h('p', { style: { color: '#fff', fontSize: '12px', margin: 0, fontStyle: 'italic', opacity: 0.9 } }, titre || id)
+                )
+              );
+            })
+          )
+        );
+      }
+    });
+
+    CMS.registerPreviewTemplate('videos', VideosPreview);
+  </script>
 </body>
 </html>
