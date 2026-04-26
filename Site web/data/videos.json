@@ -1,11 +1,11 @@
 {
   "ids": [
-    "wbv1wn4gwy",
-    "ktukr14m4m",
-    "69ngvnq4v6",
-    "ccy6ubumrz",
-    "mvkaxo29im",
-    "drh1ubj1vu",
-    "oqvpya8aev"
+    { "id": "wbv1wn4gwy", "titre": "Mariage Paris" },
+    { "id": "ktukr14m4m", "titre": "Bar-Mitsvah" },
+    { "id": "69ngvnq4v6", "titre": "Soirée Corporate" },
+    { "id": "ccy6ubumrz", "titre": "Clubbing" },
+    { "id": "mvkaxo29im", "titre": "Anniversaire" },
+    { "id": "drh1ubj1vu", "titre": "Show Live" },
+    { "id": "oqvpya8aev", "titre": "Outdoor" }
   ]
 }

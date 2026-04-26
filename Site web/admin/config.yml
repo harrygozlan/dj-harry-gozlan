@@ -19,13 +19,16 @@ collections:
           - label: "Photos"
             name: "photos"
             widget: "list"
-            summary: "{{fields.alt}}"
+            summary: "🖼 {{fields.alt}}"
             fields:
               - label: "Image"
                 name: "src"
                 widget: "image"
                 hint: "Uploader une photo (format portrait recommandé)"
-              - label: "Description (texte alternatif)"
+                media_library:
+                  config:
+                    max_file_size: 5120000
+              - label: "Description"
                 name: "alt"
                 widget: "string"
                 hint: "Ex: DJ Harry Gozlan mariage Paris"
@@ -48,15 +51,24 @@ collections:
         name: "videos"
         file: "Site web/data/videos.json"
         fields:
-          - label: "IDs des vidéos Wistia"
+          - label: "Vidéos"
             name: "ids"
             widget: "list"
-            summary: "Vidéo : {{fields.id}}"
-            field:
-              label: "ID Wistia"
-              name: "id"
-              widget: "string"
-              hint: "Ex: wbv1wn4gwy (les caractères après /medias/ dans l'URL Wistia)"
+            summary: "🎥 {{fields.titre}} ({{fields.id}})"
+            fields:
+              - label: "Vignette Wistia"
+                name: "thumbnail"
+                widget: "image"
+                required: false
+                hint: "Copier-coller l'URL de la miniature depuis Wistia"
+              - label: "Titre de la vidéo"
+                name: "titre"
+                widget: "string"
+                hint: "Ex: Mariage au château, Bar-Mitsvah Paris..."
+              - label: "ID Wistia"
+                name: "id"
+                widget: "string"
+                hint: "Les caractères après /medias/ dans l'URL Wistia"
 
   - name: "parametres"
     label: "⚙️ Paramètres du site"
